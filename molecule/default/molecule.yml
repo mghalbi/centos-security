@@ -2,10 +2,8 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: Update apt cahce (on Centos).
+    - name: Update yum cahce on Centos.
       ansible.builtin.yum:
         update_cache: true
-        cache_valid_time: 3600
-      when: ansible_os_family == 'Redhat'
 
 - import_playbook: ../../main.yml
