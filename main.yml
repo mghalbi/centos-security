@@ -1,0 +1,121 @@
+---
+- hosts: all
+  become: true
+
+  handlers:
+    - name: restart ssh
+      service: 
+        name: sshd 
+        state: restarted
+
+  tasks:
+    # Install EPEL.
+    - name: Ensure EPEL repo is present.
+      yum:
+        name: epel-release
+        state: present
+
+    # Install fail2ban,
+    - name: Install fail2ban.
+      yum:
+        name: fail2ban
+        state: present
+        enablerepo: epel
+    
+    - name: Add a deployment user.
+      user:
+        name: mghalbi
+        state: present
+
+    - name: Set up multiple authorized keys
+      authorized_key:
+        user: mghalbi
+        state: present
+        key: '{{ item }}'
+      with_file:
+        - public_keys/mghalbi
+
+    - name: Update SSH configuration to be more secure.
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+        validate: 'sshd -t -f %s'
+      with_items:
+        - regexp: "^PasswordAuthentication"
+          line: "PasswordAuthentication no"
+        - regexp: "^PermitRootLogin"
+          line: "PermitRootLogin no"
+      notify: restart ssh
+
+    - name: Add configured users allowed to connect over ssh
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^AllowUsers'
+        line: "AllowUsers mghalbi"
+        state: present
+        create: true
+        validate: 'sshd -T -f %s'
+        mode: 0644
+      notify: restart ssh
+
+    # Disable root login and use `sudo`
+    - name: Add sudo rights for deployment user.
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: '^mghalbi'
+        line: 'mghalbi ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        validate: 'visudo -cf %s'
+
+    # Remove unused software, open only required ports.
+    - name: Remove unused packages.
+      package:
+        name:
+          - nano
+          - sendmail
+        state: absent
+
+    # Set Up A Firewall
+    - name: Ensure firewalld is running.
+      yum:
+        name: firewalld
+        state: present
+
+    # Configuring a firewall with `firewalld` on Centos.
+    - name: Ensure firewalld is running.
+      service:
+        name: firewalld
+        state: started
+
+    # Configuring open ports.
+    - name: Configure open ports with firewalld.
+      firewalld:
+        state: "{{ item.state }}"
+        port: "{{ item.port }}"
+        zone: external
+        immediate: yes
+        permanent: yes
+      with_items:
+        - { state: 'enabled', port: '22/tcp' }
+        - { state: 'enabled', port: '80/tcp' }
+        - { state: 'enabled', port: '123/udp' }
+
+    # Use SELinux (Security-Enhanced Linux).
+    - name: Install Python SELinux library.
+      yum:
+        name: python3-libselinux
+        state: present
+
+    - name: Ensure SELinux is enabled in `targeted` mode.
+      selinux:
+        policy: targeted
+        state: enforcing
+
+    - name: Ensure httpd can connect to the network.
+      seboolean:
+        name: httpd_can_network_connect
+        state: yes
+        persistent: yes
+      when: ansible_selinux.status == 'enabled'
