@@ -5,3 +5,5 @@
     - name: Update yum cahce on Centos.
       ansible.builtin.yum:
         update_cache: true
+
+- import_playbook: ../../main.yml

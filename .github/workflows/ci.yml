@@ -12,7 +12,10 @@ jobs:
   test:
     name: Molecule
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        distro:
+          - rockylinux8
 
     steps:
       - name: Check out the codebase.
