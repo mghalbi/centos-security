@@ -7,5 +7,9 @@
     - name: Update yum cahce on Centos.
       ansible.builtin.yum:
         update_cache: true
+    - name:
+      ansible.builtin.yum: 
+        name: selinux-policy
+        state: present
 
 - import_playbook: ../../main.yml
