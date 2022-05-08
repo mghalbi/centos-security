@@ -9,20 +9,3 @@
         update_cache: true
 
 - import_playbook: ../../main.yml
----
-dependency:
-  name: galaxy
-driver:
-  name: docker
-platforms:
-  - name: instance
-    image: "geerlingguy/docker-rockylinux8-ansible:latest"
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
-provisioner:
-  name: ansible
-verifier:
-  name: ansible
