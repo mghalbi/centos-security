@@ -1,5 +1,15 @@
 
 ---
+- name: Converge
+  hosts: all
+
+  tasks:
+    - name: Update yum cahce on Centos.
+      ansible.builtin.yum:
+        update_cache: true
+
+- import_playbook: ../../main.yml
+---
 dependency:
   name: galaxy
 driver:
