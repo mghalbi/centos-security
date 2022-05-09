@@ -11,5 +11,13 @@
       ansible.builtin.yum: 
         name: selinux-policy
         state: present
+    - name:
+      ansible.builtin.yum: 
+        name: openssh-server
+        state: present
+    - name:
+      ansible.builtin.yum: 
+        name: openssh-clients
+        state: present
 
 - import_playbook: ../../main.yml
