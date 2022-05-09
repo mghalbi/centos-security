@@ -12,12 +12,16 @@
         name: selinux-policy
         state: present
     - name:
-      ansible.builtin.yum: 
+      ansible.builtin.yum:
         name: openssh-server
         state: present
     - name:
-      ansible.builtin.yum: 
+      ansible.builtin.yum:
         name: openssh-clients
         state: present
+    - name: Ensure sshd is running.
+      service:
+        name: sshd
+        state: started
 
 - import_playbook: ../../main.yml
