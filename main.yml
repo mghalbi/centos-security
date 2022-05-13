@@ -4,8 +4,8 @@
 
   handlers:
     - name: restart ssh
-      service: 
-        name: sshd 
+      service:
+        name: sshd
         state: restarted
 
   tasks:
@@ -21,7 +21,7 @@
         name: fail2ban
         state: present
         enablerepo: epel
-    
+
     - name: Add a deployment user.
       user:
         name: mghalbi

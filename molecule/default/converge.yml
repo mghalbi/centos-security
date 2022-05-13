@@ -1,4 +1,3 @@
-
 ---
 - name: Converge
   hosts: all
@@ -8,7 +7,7 @@
       ansible.builtin.yum:
         update_cache: true
     - name:
-      ansible.builtin.yum: 
+      ansible.builtin.yum:
         name: selinux-policy
         state: present
     - name:
