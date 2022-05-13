@@ -6,15 +6,15 @@
     - name: Update yum cahce on Centos.
       ansible.builtin.yum:
         update_cache: true
-    - name:
+    - name: Ensure selinux-policy is present
       ansible.builtin.yum:
         name: selinux-policy
         state: present
-    - name:
+    - name: Ensure openssh-server is present
       ansible.builtin.yum:
         name: openssh-server
         state: present
-    - name:
+    - name: Ensure openssh-clients is present
       ansible.builtin.yum:
         name: openssh-clients
         state: present
