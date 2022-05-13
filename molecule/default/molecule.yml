@@ -3,6 +3,8 @@ dependency:
   name: galaxy
 driver:
   name: docker
+lint:
+  name: yamllint
 platforms:
   - name: instance
     image: "mghalbi/docker-centos9-ansible:latest"
@@ -13,6 +15,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  lint:
+    name: ansible-lint
 verifier:
   name: testinfra
   lint:
