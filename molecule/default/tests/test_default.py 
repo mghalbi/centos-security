@@ -10,5 +10,5 @@ def test_hosts_file(host):
     f = host.file('/etc/hosts')
 
     assert f.exists
-    assert f.user == 'mhgalbi'
+    assert f.user == 'mghalbi'
     assert f.group == 'mghalbi'
