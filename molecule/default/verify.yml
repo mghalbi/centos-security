@@ -10,7 +10,7 @@
     register: new_user
   - name: "Print user"
     debug:
-      msg: "Ansible user: {{ new_user.stdout }}"
+      msg: "Ansible user: {{ new_user }}"
   - name: "check if user exists"
     assert:
       that:
