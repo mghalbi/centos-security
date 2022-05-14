@@ -8,9 +8,12 @@
       name: mghalbi
       state: present
     register: new_user
+  - name: Print user
+    debug:
+      msg: "Ansible user: {{ new_user.stdout }}"
   - name: "check if user exists"
     assert:
       that:
-        - new_user.user == "mghalbi"
+        - new_user.name == "mghalbi"
       success_msg: "user exist"
       fail_msg: "user dosent exist"
