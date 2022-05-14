@@ -5,6 +5,7 @@
   tasks:
   - name: "Ensure user is present"
     user:
+      name: mghalbi
       state: present
     register: new_user
   - name: "check if user exists"
