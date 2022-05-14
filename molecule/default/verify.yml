@@ -4,11 +4,12 @@
   gather_facts: false
   tasks:
   - name: "Ensure user is present"
-    state: present
-    register: user
-  - name: "check if /file.txt exists"
+    user:
+      state: present
+    register: new_user
+  - name: "check if user exists"
     assert:
       that:
-        - user.user == "mghalbi"
+        - new_user.user == "mghalbi"
       success_msg: "user exist"
       fail_msg: "user dosent exist"
