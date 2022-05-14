@@ -8,7 +8,7 @@
       name: mghalbi
       state: present
     register: new_user
-  - name: Print user
+  - name: "Print user"
     debug:
       msg: "Ansible user: {{ new_user.stdout }}"
   - name: "check if user exists"
